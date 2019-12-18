@@ -1,22 +1,40 @@
+// package definition
 package main
 
-import "time"
+// import of dependencies
+import (
+	"fmt"
+	"github.com/jotdl/othello"
+	"time"
+)
 
-import "fmt"
-
+// main function
 func main() {
-	bot1 := othello.NewSimpleBot()
-	bot2 := MyBot{}
+	// create a bot from our calculation method
+	bot := othello.FuncPlayer(calculateNextTurn)
 
-	game := othello.NewGame(bot1, bot2)
+	// create a new othello game with our bot and a simple ai
+	game := othello.NewGame(othello.NewTerminalPlayer(), bot)
 
+	// as long as the game is not finished repeat game execution
 	for !game.Finished() {
-		fmt.Println(game)
+		fmt.Println(game) // print the current board
 
-		game.DoNextMove()
+		err := game.DoNextMove() // calculate next move
+		if err != nil {
+			panic(fmt.Errorf("error during game execution %w", err))
+		}
 
-		time.Sleep(2 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 	}
 
-	fmt.Printf("And the winner is %q with a final score of %v:%v", game.Winner(), game.Player1Score(), game.Player2Score())
+	// print the final result
+	fmt.Printf("The winner is \"Player %v\"!!!\n", game.Winner())
+}
+
+// calculateNextTurn calculates the next turn of our bot based on the given board
+func calculateNextTurn(board *othello.Board, currentPlayer othello.Color) othello.Turn {
+	moves := othello.FindPossibleMoves(board, currentPlayer)
+
+	return moves[0]
 }
