@@ -20,7 +20,7 @@ func main() {
 	for !game.Finished() {
 		fmt.Println(game) // print the current board
 
-		err := game.DoNextMove() // calculate next move
+		_, err := game.DoNextMove() // calculate next move
 		if err != nil {
 			panic(fmt.Errorf("error during game execution %w", err))
 		}
