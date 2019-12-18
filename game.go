@@ -43,7 +43,8 @@ func (g *Game) String() string {
 	buf := &bytes.Buffer{}
 
 	score := g.Board().Score()
-	fmt.Fprintf(buf, "Move #%v\t\tScore: %v:%v\n\n", g.MoveCount, score[0], score[1])
+	fmt.Fprintf(buf, "Move #%2d\t\tScore: %2d:%2d\n", g.MoveCount, score[0], score[1])
+	fmt.Fprintf(buf, "Current: Player %v\t(● : Player 1, ○ : Player 2)\n\n", int(g.currentPlayer))
 	fmt.Fprint(buf, g.board)
 
 	return buf.String()
@@ -72,10 +73,10 @@ func (g *Game) DoNextMove() (Turn, error) {
 
 	g.currentPlayer = g.currentPlayer.Opposite()
 
-	if len(FindPossibleMoves(g.board, g.currentPlayer)) == 0 {
+	if len(FindPossibleTurns(g.board, g.currentPlayer)) == 0 {
 		g.currentPlayer = g.currentPlayer.Opposite()
 
-		if len(FindPossibleMoves(g.board, g.currentPlayer)) == 0 {
+		if len(FindPossibleTurns(g.board, g.currentPlayer)) == 0 {
 			g.finished = true
 		}
 	}

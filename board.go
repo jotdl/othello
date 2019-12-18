@@ -7,11 +7,14 @@ import (
 	"strings"
 )
 
+// direction reflects a simple direction on the othello boards
+// used for easier navigation
 type direction struct {
 	X int
 	Y int
 }
 
+// all possible directions
 var directions = [8]direction{
 	{1, 1},
 	{1, 0},
@@ -23,11 +26,13 @@ var directions = [8]direction{
 	{-1, 1},
 }
 
+// Board represents the current game state
 type Board struct {
-	Dimension int
-	Fields    [][]Color
+	Dimension int       // Dimension of this board, defaults to 8
+	Fields    [][]Color // Slice of Slice of fields. Outer slice represents rows while inner slice represents column
 }
 
+// newBoard creates a new board with the given dimension
 func newBoard(dim int) *Board {
 	b := Board{
 		Dimension: dim,
@@ -49,6 +54,7 @@ func newBoard(dim int) *Board {
 	return &b
 }
 
+// Score returns the current score for the given board
 func (b Board) Score() Score {
 	score := Score{}
 
@@ -68,6 +74,7 @@ func (b Board) Score() Score {
 	return score
 }
 
+// ScoreOf returns only the score of the given player
 func (b Board) ScoreOf(player Color) uint8 {
 	scores := b.Score()
 
@@ -80,13 +87,15 @@ func (b Board) ScoreOf(player Color) uint8 {
 	return 0
 }
 
+// Field returns the Field at the given location. Returns an empty Field if requested location is invalid
 func (b Board) Field(row, column int) Field {
-	if row > b.Dimension || column > b.Dimension {
+	if !b.IsValidPos(row, column) {
 		return Field{}
 	}
 	return Field{Column: column, Row: row, Value: b.Fields[row][column]}
 }
 
+// Clone the current board so it's save to modify
 func (b Board) Clone() *Board {
 	clone := Board{
 		Dimension: b.Dimension,
@@ -135,6 +144,7 @@ func (b Board) String() string {
 	return buf.String()
 }
 
+// IsValidPos checks if the specified location is on this board or outside. Returns false if outside
 func (b Board) IsValidPos(row, column int) bool {
 	return row >= 0 && row < b.Dimension && column >= 0 && column < b.Dimension
 }
@@ -183,7 +193,8 @@ func (b Board) findValidDirectionsOfMove(row, column int, player Color) ([]direc
 	return validDirections, nil
 }
 
-func (b Board) IsValidMove(row, column int, player Color) error {
+// IsValidTurn checks if a move for a given player/color is valid. Returns an error if not
+func (b Board) IsValidTurn(row, column int, player Color) error {
 	directions, err := b.findValidDirectionsOfMove(row, column, player)
 	if err != nil {
 		return err
@@ -196,6 +207,7 @@ func (b Board) IsValidMove(row, column int, player Color) error {
 	return nil
 }
 
+// MakeTurn makes the given turn with the specified location and color. Will return an error if move is not valid
 func (b *Board) MakeTurn(row, column int, player Color) error {
 	directions, err := b.findValidDirectionsOfMove(row, column, player)
 	if err != nil {

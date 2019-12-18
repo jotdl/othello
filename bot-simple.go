@@ -7,7 +7,7 @@ func NewSimpleAIPlayer() Player {
 type simplePlayer struct{}
 
 func (b *simplePlayer) NextTurn(board *Board, currentPlayer Color) Turn {
-	moves := FindPossibleMoves(board, currentPlayer)
+	moves := FindPossibleTurns(board, currentPlayer)
 
 	currentScore := board.ScoreOf(currentPlayer)
 

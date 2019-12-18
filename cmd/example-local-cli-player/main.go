@@ -4,17 +4,17 @@ package main
 // import of dependencies
 import (
 	"fmt"
-
 	"github.com/jotdl/othello"
+	"time"
 )
 
 // main function
 func main() {
 	// create a bot from our calculation method
-	bot := othello.NewMinMaxAIPlayer() // othello.FuncPlayer(calculateNextTurn)
+	bot := othello.FuncPlayer(calculateNextTurn)
 
 	// create a new othello game with our bot and a simple ai
-	game := othello.NewGame(bot, othello.NewAdvancedAIPlayer())
+	game := othello.NewGame(othello.NewTerminalPlayer(), bot)
 
 	// as long as the game is not finished repeat game execution
 	for !game.Finished() {
@@ -25,10 +25,8 @@ func main() {
 			panic(fmt.Errorf("error during game execution %w", err))
 		}
 
-		//time.Sleep(500 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 	}
-
-	fmt.Println(game) // print the final board
 
 	// print the final result
 	fmt.Printf("The winner is \"Player %v\"!!!\n", game.Winner())

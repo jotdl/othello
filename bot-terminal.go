@@ -16,7 +16,7 @@ func (b *terminalPlayer) NextTurn(board *Board, currentPlayer Color) Turn {
 	for gotValidMove := false; !gotValidMove; {
 		row, column = b.askForNextMove(board.Dimension)
 
-		err := board.IsValidMove(row, column, currentPlayer)
+		err := board.IsValidTurn(row, column, currentPlayer)
 		gotValidMove = err == nil
 		if err != nil {
 			fmt.Printf("Move was not valid, due %q. \nPlease try again!\n\n", err)

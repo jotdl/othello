@@ -1,5 +1,6 @@
 package othello
 
+// Color represents the current value of a othello stone/field
 type Color int
 
 const (
@@ -8,6 +9,7 @@ const (
 	White
 )
 
+// Opposite of the current value. Stays None if current color is None
 func (p Color) Opposite() Color {
 	switch p {
 	case Black:
