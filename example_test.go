@@ -6,7 +6,7 @@ import (
 	"github.com/jotdl/othello"
 )
 
-func ExampleAI() {
+func Example() {
 	game := othello.NewGame(othello.NewSimpleAIPlayer(), othello.NewBraindeadAIPlayer())
 
 	// lets calculate 1 move for each player
