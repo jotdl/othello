@@ -33,10 +33,3 @@ func main() {
 	// print the final result
 	fmt.Printf("The winner is \"Player %v\"!!!\n", game.Winner())
 }
-
-// calculateNextTurn calculates the next turn of our bot based on the given board
-func calculateNextTurn(board *othello.Board, currentPlayer othello.Color) othello.Turn {
-	moves := othello.FindPossibleMoves(board, currentPlayer)
-
-	return moves[0]
-}
